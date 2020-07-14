@@ -24,33 +24,62 @@ class qa_hipchat_notifications_event {
   {
     switch ($event) {
       case 'q_post':
-        $this->send_hipchat_notification(
-          $this->build_new_question_message(
-            isset($handle) ? $handle : qa_lang('main/anonymous'),
-            $params['title'],
+        if (qa_opt('hipchat_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_hipchat_notification(
+            $this->build_new_question_message_hipchat(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $params['title'],
+              qa_q_path($params['postid'], $params['title'], true)
+            )
+          );
+        }
+        if (qa_opt('ms_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_msteams_notification(
+            $this->build_new_question_message_msteams(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $params['title']
+            ),
             qa_q_path($params['postid'], $params['title'], true)
-          )
-        );
+          );
+        }
         break;
       case 'a_post':
         $parentpost=qa_post_get_full($params['parentid']);
-
-        $this->send_hipchat_notification(
-          $this->build_new_answer_message(
-            isset($handle) ? $handle : qa_lang('main/anonymous'),
-            $parentpost['title'],
-            qa_path(qa_q_request($params['parentid'], $parentpost['title']), null, qa_opt('site_url'), null, qa_anchor('A', $params['postid']))
-          )
-        );
+        if (qa_opt('hipchat_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_hipchat_notification(
+            $this->build_new_answer_message_hipchat(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $parentpost['title'],
+              qa_path(qa_q_request($params['parentid'], $parentpost['title']), null, qa_opt('site_url'), null, qa_anchor('A', $params['postid']))
+            )
+          );
+        }
+        if (qa_opt('ms_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_msteams_notification(
+            $this->build_new_answer_message_msteams(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $params['title']
+            ),
+            qa_q_path($params['postid'], $params['title'], true)
+          );
+        }
         break;
     }
   }
 
-  private function build_new_question_message($who, $title, $url) {
+  private function build_new_question_message_hipchat($who, $title, $url) {
     return sprintf("%s asked a new question: <a href=\"%s\">\"%s\"</a>. Do you know the answer?", $who, $url, $title);
   }
 
-  private function build_new_answer_message($who, $title, $url) {
+  private function build_new_question_message_msteams($who, $title) {
+    return sprintf("%s asked: %s. Do you know the answer? Like this message before respond to everyone know that you get this!", $who, $title);
+  }
+
+  private function build_new_answer_message_msteams($who, $title) {
+    return sprintf("%s answered the question: %s", $who, $title);
+  }
+
+  private function build_new_answer_message_hipchat($who, $title, $url) {
     return sprintf("%s answered the question: <a href=\"%s\">\"%s\"</a>.", $who, $url, $title);
   }
 
@@ -75,6 +104,23 @@ class qa_hipchat_notifications_event {
         $result = $hc->message_room($room, $sender, $message, $notify, $color);
       }
       catch (HipChat\HipChat_Exception $e) {
+        error_log($e->getMessage());
+      }
+    }
+  }
+
+  private function send_msteams_notification($message, $url) {
+    require_once $this->plugindir . 'MSTeams' . DIRECTORY_SEPARATOR . 'MSTeams.php';
+
+    $msUrl = qa_opt('ms_notifications_webhook_url');
+    $title = qa_opt('ms_notifications_webhook_title');
+
+    if ($msUrl) {
+      $msTeams = new MSTeams\MSTeams($msUrl);
+      try{
+        $result = $msTeams->message_room($title, $message, $url);
+      }
+      catch (MSTeams\MSTeams_Exception $e) {
         error_log($e->getMessage());
       }
     }

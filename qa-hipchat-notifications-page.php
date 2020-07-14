@@ -32,6 +32,13 @@ class qa_hipchat_notifications_page {
 
       'fields' => array(
         array(
+          'type' => 'checkbox',
+          'label' => 'Hipchat message enabled',
+          'value' => qa_opt('hipchat_notifications_notify_enabled') ? true : false,
+          'tags' => 'NAME="hipchat_notifications_notify_enabled"',
+        ),
+
+        array(
           'label' => 'HipChat API Token',
           'value' => qa_opt('hipchat_notifications_api_token'),
           'tags' => 'NAME="hipchat_notifications_api_token"',
@@ -60,7 +67,27 @@ class qa_hipchat_notifications_page {
           'label' => 'Notify the people in the room (Sound or Alert)',
           'value' => qa_opt('hipchat_notifications_notify') ? true : false,
           'tags' => 'NAME="hipchat_notifications_notify"',
-        )
+        ),
+
+        array(
+          'type' => 'checkbox',
+          'label' => 'MS Teams message enabled',
+          'value' => qa_opt('ms_notifications_notify_enabled') ? true : false,
+          'tags' => 'NAME="ms_notifications_notify_enabled"',
+        ),
+        
+        array(
+          'label' => 'MS Teams Webhook Url',
+          'value' => qa_opt('ms_notifications_webhook_url'),
+          'tags' => 'NAME="ms_notifications_webhook_url"',
+        ),
+
+        array(
+          'label' => 'MS Teams Webhook Title',
+          'value' => qa_opt('ms_notifications_webhook_title'),
+          'tags' => 'NAME="ms_notifications_webhook_title"',
+        ),
+
       ),
 
       'buttons' => array(
