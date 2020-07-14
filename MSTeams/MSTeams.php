@@ -47,10 +47,8 @@ class MSTeams {
    *                           proxy such as apigee.com.
    * @param $api_version string Version of API to use.
    */
-  function __construct($auth_token) {
+  function __construct($api_target) {
     $this->api_target = $api_target;
-    $this->auth_token = $auth_token;
-    $this->api_version = $api_version;
   }
 
   /**
@@ -168,7 +166,7 @@ class MSTeams {
   public function make_request($args = array(),
                                $http_method = 'GET') {
     $args['format'] = 'json';
-    $args['auth_token'] = $this->auth_token;
+    // $args['auth_token'] = $this->auth_token;
     $url = "$this->api_target";
     $post_data = null;
 
