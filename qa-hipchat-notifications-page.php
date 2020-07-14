@@ -16,6 +16,8 @@ class qa_hipchat_notifications_page {
 
     if (qa_clicked('general_save_button')) {
       // save the preferences
+      $hipchat_enabled = qa_post_text('hipchat_notifications_notify_enabled');
+      qa_opt('hipchat_notifications_notify_enabled', empty($hipchat_enabled) ? 0 : 1);
       qa_opt('hipchat_notifications_api_token', qa_post_text('hipchat_notifications_api_token'));
       qa_opt('hipchat_notifications_room_name', qa_post_text('hipchat_notifications_room_name'));
       qa_opt('hipchat_notifications_sender', qa_post_text('hipchat_notifications_sender'));
@@ -24,6 +26,11 @@ class qa_hipchat_notifications_page {
       $notify = qa_post_text('hipchat_notifications_notify');
       qa_opt('hipchat_notifications_notify', empty($notify) ? 0 : 1);
 
+      $msteams_enabled = qa_post_text('ms_notifications_notify_enabled');
+      qa_opt('ms_notifications_notify_enabled', empty($msteams_enabled) ? 0 : 1);
+      qa_opt('ms_notifications_webhook_url', qa_post_text('ms_notifications_webhook_url'));
+      qa_opt('ms_notifications_webhook_title', qa_post_text('ms_notifications_webhook_title'));
+      
       $saved=true;
     }
 
