@@ -58,9 +58,9 @@ class qa_hipchat_notifications_event {
           $this->send_msteams_notification(
             $this->build_new_answer_message_msteams(
               isset($handle) ? $handle : qa_lang('main/anonymous'),
-              $params['title']
+              $parentpost['title']
             ),
-            qa_q_path($params['postid'], $params['title'], true)
+            qa_path(qa_q_request($params['parentid'], $parentpost['title']), null, qa_opt('site_url'), null, qa_anchor('A', $params['postid']))
           );
         }
         break;
