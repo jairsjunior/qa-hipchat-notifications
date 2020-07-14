@@ -47,8 +47,7 @@ class MSTeams {
    *                           proxy such as apigee.com.
    * @param $api_version string Version of API to use.
    */
-  function __construct($auth_token, $api_target = self::DEFAULT_TARGET,
-                       $api_version = self::VERSION_1) {
+  function __construct($auth_token) {
     $this->api_target = $api_target;
     $this->auth_token = $auth_token;
     $this->api_version = $api_version;
