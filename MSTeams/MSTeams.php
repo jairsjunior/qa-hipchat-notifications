@@ -110,7 +110,7 @@ class MSTeams {
     }
     if (is_array($post_data)) {
       curl_setopt($ch, CURLOPT_POST, 1);
-      $payload = json_encode($post_data);
+      $payload = json_encode($post_data, JSON_UNESCAPED_UNICODE);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     }
