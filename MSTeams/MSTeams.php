@@ -76,6 +76,7 @@ class MSTeams {
           )
       )
     );
+    echo $args;
     $response = $this->make_request($args, 'POST');
     return ($response->status == 'sent');
   }
@@ -112,6 +113,7 @@ class MSTeams {
       curl_setopt($ch, CURLOPT_POST, 1);
       $post_data = array_map('htmlentities',$post_data);
       $payload = html_entity_decode(json_encode($array));
+      echo $payload;
       curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     }
