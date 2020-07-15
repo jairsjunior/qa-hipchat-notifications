@@ -61,8 +61,8 @@ class MSTeams {
       '@context' => utf8_encode("https://schema.org/extensions"),
       '@type' => utf8_encode("MessageCard"),
       'themeColor' => utf8_encode("0072C6"),
-      'title' => $title,
-      'text' => $text,
+      'title' => htmlentities($title),
+      'text' => htmlentities($text),
       'potentialAction' => array(
           array(
             '@type' => utf8_encode("OpenUri"),
@@ -76,7 +76,7 @@ class MSTeams {
           )
       )
     );
-    error_log(sprintf('Message room: %s', $args));
+    error_log($args);
     $response = $this->make_request($args, 'POST');
     return ($response->status == 'sent');
   }
@@ -111,9 +111,8 @@ class MSTeams {
     }
     if (is_array($post_data)) {
       curl_setopt($ch, CURLOPT_POST, 1);
-      $post_data = array_map('htmlentities',$post_data);
       $payload = html_entity_decode(json_encode($array));
-      error_log(sprintf('Payload: %s', $payload));
+      error_log($payload);
       curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
       curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
     }
