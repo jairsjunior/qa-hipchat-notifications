@@ -61,8 +61,8 @@ class MSTeams {
       '@context' => utf8_encode("https://schema.org/extensions"),
       '@type' => utf8_encode("MessageCard"),
       'themeColor' => utf8_encode("0072C6"),
-      'title' => utf8_encode($title),
-      'text' => utf8_encode($text),
+      'title' => $title,
+      'text' => $text,
       'potentialAction' => array(
           array(
             '@type' => utf8_encode("OpenUri"),
