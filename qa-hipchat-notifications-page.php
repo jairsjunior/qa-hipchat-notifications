@@ -30,6 +30,11 @@ class qa_hipchat_notifications_page {
       qa_opt('ms_notifications_notify_enabled', empty($msteams_enabled) ? 0 : 1);
       qa_opt('ms_notifications_webhook_url', qa_post_text('ms_notifications_webhook_url'));
       qa_opt('ms_notifications_webhook_title', qa_post_text('ms_notifications_webhook_title'));
+
+      $telegram_enabled = qa_post_text('telegram_notifications_notify_enabled');
+      qa_opt('telegram_notifications_notify_enabled', empty($msteams_enabled) ? 0 : 1);
+      qa_opt('telegram_notifications_webhook_url', qa_post_text('telegram_notifications_webhook_url'));
+      qa_opt('telegram_notifications_webhook_chat_id', qa_post_text('telegram_notifications_webhook_chat_id'));
       
       $saved=true;
     }
@@ -94,6 +99,26 @@ class qa_hipchat_notifications_page {
           'value' => qa_opt('ms_notifications_webhook_title'),
           'tags' => 'NAME="ms_notifications_webhook_title"',
         ),
+
+        array(
+          'type' => 'checkbox',
+          'label' => 'Telegram message enabled',
+          'value' => qa_opt('telegram_notifications_notify_enabled') ? true : false,
+          'tags' => 'NAME="telegram_notifications_notify_enabled"',
+        ),
+        
+        array(
+          'label' => 'Telegram Webhook Url',
+          'value' => qa_opt('telegram_notifications_webhook_url'),
+          'tags' => 'NAME="telegram_notifications_webhook_url"',
+        ),
+
+        array(
+          'label' => 'Telegram Chat Id',
+          'value' => qa_opt('telegram_notifications_webhook_chat_id'),
+          'tags' => 'NAME="telegram_notifications_webhook_chat_id"',
+        ),
+
 
       ),
 

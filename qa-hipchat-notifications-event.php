@@ -42,6 +42,15 @@ class qa_hipchat_notifications_event {
             qa_q_path($params['postid'], $params['title'], true)
           );
         }
+        if (qa_opt('telegram_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_telegram_notification(
+            $this->build_new_question_message_telegram(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $params['title']
+            ),
+            qa_q_path($params['postid'], $params['title'], true)
+          );
+        }
         break;
       case 'a_post':
         $parentpost=qa_post_get_full($params['parentid']);
@@ -63,6 +72,15 @@ class qa_hipchat_notifications_event {
             qa_path(qa_q_request($params['parentid'], $parentpost['title']), null, qa_opt('site_url'), null, qa_anchor('A', $params['postid']))
           );
         }
+        if (qa_opt('telegram_notifications_notify_enabled') > 0 ? true : false) {
+          $this->send_telegram_notification(
+            $this->build_new_answer_message_telegram(
+              isset($handle) ? $handle : qa_lang('main/anonymous'),
+              $parentpost['title']
+            ),
+            qa_path(qa_q_request($params['parentid'], $parentpost['title']), null, qa_opt('site_url'), null, qa_anchor('A', $params['postid']))
+          );
+        }
         break;
     }
   }
@@ -75,7 +93,15 @@ class qa_hipchat_notifications_event {
     return sprintf("%s asked: %s. Do you know the answer? Like this message before respond to everyone know that you get this!", $who, $title);
   }
 
+  private function build_new_question_message_telegram($who, $title) {
+    return sprintf("%s asked: %s. Do you know the answer? Reply with i got it, to everyone knows that you pick this question", $who, $title);
+  }
+
   private function build_new_answer_message_msteams($who, $title) {
+    return sprintf("%s answered the question: %s", $who, $title);
+  }
+
+  private function build_new_answer_message_telegram($who, $title) {
     return sprintf("%s answered the question: %s", $who, $title);
   }
 
@@ -119,6 +145,23 @@ class qa_hipchat_notifications_event {
       $msTeams = new MSTeams\MSTeams($msUrl);
       try{
         $result = $msTeams->message_room($title, $message, $url);
+      }
+      catch (MSTeams\MSTeams_Exception $e) {
+        error_log($e->getMessage());
+      }
+    }
+  }
+
+  private function send_telegram_notification($message, $url) {
+    require_once $this->plugindir . 'Telegram' . DIRECTORY_SEPARATOR . 'Telegram.php';
+
+    $telegramUrl = qa_opt('telegram_notifications_webhook_url');
+    $chatId = qa_opt('telegram_notifications_webhook_chat_id');
+
+    if ($telegramUrl) {
+      $telegram = new Telegram\Telegram($telegramUrl, $chatId);
+      try{
+        $result = $telegram->message_room($message, $url);
       }
       catch (MSTeams\MSTeams_Exception $e) {
         error_log($e->getMessage());
