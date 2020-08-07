@@ -32,7 +32,7 @@ class qa_hipchat_notifications_page {
       qa_opt('ms_notifications_webhook_title', qa_post_text('ms_notifications_webhook_title'));
 
       $telegram_enabled = qa_post_text('telegram_notifications_notify_enabled');
-      qa_opt('telegram_notifications_notify_enabled', empty($msteams_enabled) ? 0 : 1);
+      qa_opt('telegram_notifications_notify_enabled', empty($telegram_enabled) ? 0 : 1);
       qa_opt('telegram_notifications_webhook_url', qa_post_text('telegram_notifications_webhook_url'));
       qa_opt('telegram_notifications_webhook_chat_id', qa_post_text('telegram_notifications_webhook_chat_id'));
       

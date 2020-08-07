@@ -93,8 +93,8 @@ class qa_hipchat_notifications_event {
     return sprintf("%s asked: %s. Do you know the answer? Like this message before respond to everyone know that you get this!", $who, $title);
   }
 
-  private function build_new_question_message_telegram($who, $title) {
-    return sprintf("%s asked: %s. Do you know the answer? Reply with i got it, to everyone knows that you pick this question", $who, $title);
+  private function build_new_question_message_telegram($who, $title, $url) {
+    return sprintf("<b>%s</b> asked: <br></br><a href=\"%s\">\"%s\"</a> <br></br><br></br>Do you know the answer? <br></br>Reply with <b>i got it</b>, to everyone knows that you pick this question\.", $who, $url, $title);
   }
 
   private function build_new_answer_message_msteams($who, $title) {
@@ -163,7 +163,7 @@ class qa_hipchat_notifications_event {
       try{
         $result = $telegram->message_room($message, $url);
       }
-      catch (MSTeams\MSTeams_Exception $e) {
+      catch (Telegram\Telegram_Exception $e) {
         error_log($e->getMessage());
       }
     }

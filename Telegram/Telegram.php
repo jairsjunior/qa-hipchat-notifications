@@ -61,7 +61,8 @@ class Telegram {
   public function message_room($text, $url) {
     $args = array(
       'chat_id' => ("$this->chat_id"),
-      'text' => htmlentities($text)
+      'text' => $text,
+      'parse_mode' => "HTML"
     );
     $response = $this->make_request($args, 'POST');
     return ($response->status == 'sent');
@@ -97,9 +98,7 @@ class Telegram {
     }
     if (is_array($post_data)) {
       curl_setopt($ch, CURLOPT_POST, 1);
-      $payload = html_entity_decode(json_encode($post_data));
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);      
     }
     $response = curl_exec($ch);
 
