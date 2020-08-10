@@ -94,7 +94,7 @@ class qa_hipchat_notifications_event {
   }
 
   private function build_new_question_message_telegram($who, $title, $url) {
-    return sprintf("<b>%s</b> asked: <br></br><a href=\"%s\">\"%s\"</a> <br></br><br></br>Do you know the answer? <br></br>Reply with <b>i got it</b>, to everyone knows that you pick this question\.", $who, $url, $title);
+    return sprintf("<b>%s</b> asked: \n<a href=\"%s\">\"%s\"</a> \n\nDo you know the answer? \nReply with <b>i got it</b>, to everyone knows that you pick this question.", $who, $url, $title);
   }
 
   private function build_new_answer_message_msteams($who, $title) {
