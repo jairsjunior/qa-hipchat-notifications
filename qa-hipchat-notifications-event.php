@@ -46,7 +46,8 @@ class qa_hipchat_notifications_event {
           $this->send_telegram_notification(
             $this->build_new_question_message_telegram(
               isset($handle) ? $handle : qa_lang('main/anonymous'),
-              $params['title']
+              $params['title'],
+              qa_q_path($params['postid'], $params['title'], true)
             ),
             qa_q_path($params['postid'], $params['title'], true)
           );
@@ -94,7 +95,7 @@ class qa_hipchat_notifications_event {
   }
 
   private function build_new_question_message_telegram($who, $title, $url) {
-    return sprintf("<b>%s</b> asked: \n<a href=\"%s\">\"%s\"</a> \n\nDo you know the answer? \nReply with <b>i got it</b>, to everyone knows that you pick this question.", $who, $url, $title);
+    return sprintf("<b>%s</b> asked: \n<a href=\"%s\">\"%s\"</a> \n\nDo you know the answer? \nReply with <b>i got it</b>, to everyone knows that you pick this question.", $who, $this->replaceHttp($url), $title);
   }
 
   private function build_new_answer_message_msteams($who, $title) {
@@ -107,6 +108,10 @@ class qa_hipchat_notifications_event {
 
   private function build_new_answer_message_hipchat($who, $title, $url) {
     return sprintf("%s answered the question: <a href=\"%s\">\"%s\"</a>.", $who, $url, $title);
+  }
+
+  private function replaceHttp($url) {
+    return str_replace("http:","https:",$url);
   }
 
   private function send_hipchat_notification($message) {
